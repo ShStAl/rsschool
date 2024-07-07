@@ -1,10 +1,11 @@
 import './App.css'
 import { Component, ChangeEvent } from 'react'
 import axios from 'axios'
+import { Product, ProductListResponse } from './shared/types/product.ts'
 
 interface AppState {
     searchTerm: string;
-    items: any[],
+    items: Product[],
 }
 
 class App extends Component<{}, AppState> {
@@ -38,9 +39,10 @@ class App extends Component<{}, AppState> {
         const query = searchTerm.trim()
         const url = query ? `https://dummyjson.com/products/search?limit=10&q=${query}` : 'https://dummyjson.com/products?limit=10'
 
-        axios.get<any[]>(url)
+        axios.get<ProductListResponse>(url)
             .then(response => {
-                this.setState({ items: response.data })
+                this.setState({ items: response.data.products })
+                console.log(this.state.items)
             })
             .catch(error => {
                 console.error('API call failed', error)
