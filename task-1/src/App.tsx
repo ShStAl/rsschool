@@ -52,7 +52,7 @@ class App extends Component<{}, AppState> {
 
     render() {
 
-        const { searchTerm } = this.state
+        const { searchTerm, items } = this.state
 
         return (
             <>
@@ -68,6 +68,14 @@ class App extends Component<{}, AppState> {
                         </div>
                     </div>
                     <div className="bottom-section">
+                        <ul>
+                            {items.map(item => (
+                                <li key={item.id}>
+                                    <h2>{item.title}, {item.price}</h2>
+                                    <p>{item.description}</p>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 </div>
             </>
