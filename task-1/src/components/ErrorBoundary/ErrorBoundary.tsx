@@ -1,11 +1,11 @@
 import { Component, ErrorInfo, ReactNode } from 'react'
 
 interface ErrorBoundaryState {
-    hasError: boolean;
+    hasError: boolean
 }
 
 interface ErrorBoundaryProps {
-    children: ReactNode;
+    children: ReactNode
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -14,7 +14,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         this.state = { hasError: false }
     }
 
-    static getDerivedStateFromError(_: Error): ErrorBoundaryState {
+    static getDerivedStateFromError(): ErrorBoundaryState {
         return { hasError: true }
     }
 
