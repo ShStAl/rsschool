@@ -14,6 +14,11 @@ class App extends Component<{}, AppState> {
         }
     }
 
+    componentDidMount() {
+        const savedSearchTerm = localStorage.getItem('searchTerm') || ''
+        this.setState({ searchTerm: savedSearchTerm })
+    }
+
     handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         this.setState({ searchTerm: event.target.value })
     }
