@@ -37,7 +37,7 @@ class App extends Component<{}, AppState> {
     fetchItems = () => {
         const { searchTerm } = this.state
         const query = searchTerm.trim()
-        const url = query ? `https://dummyjson.com/products/search?limit=10&q=${query}` : 'https://dummyjson.com/products?limit=10'
+        const url = query ? `https://dummyjson.com/products/search?limit=10&q=${query}` : 'https://dummyjson.com/products'
 
         axios.get<ProductListResponse>(url)
             .then(response => {

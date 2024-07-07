@@ -7,16 +7,16 @@
     display: flex;
     position: relative;
     flex-direction: column;
-    height: 100%;
 }
 
 .top-section {
-    background-color: #646cff;
-    height: 20%;
+    background-color: #a3a7f8;
+    height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-radius: 0 0 10% 10%;
 }
 
 .search-bar {
@@ -35,6 +35,8 @@
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
+    background-color: white;
+    color: #646cff;
 }
 
 .search-input:hover {
@@ -46,9 +48,17 @@
     outline: 4px auto -webkit-focus-ring-color;
 }
 
-h1 {
-    font-size: 3.2em;
+h2 {
+    font-size: 1em;
     line-height: 1.1;
+}
+
+p {
+    font-size: 0.8em;
+}
+
+ul {
+    list-style: none;
 }
 
 .search-btn {
@@ -72,6 +82,5 @@ h1 {
 }
 
 .bottom-section {
-    background-color: aqua;
-    height: 80%;
+    background-color: #ffffff;
 }
