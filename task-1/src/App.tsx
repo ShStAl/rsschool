@@ -6,8 +6,9 @@ import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx'
 
 interface AppState {
     searchTerm: string;
-    items: Product[],
+    items: Product[];
     error: string | null;
+    loading: boolean;
 }
 
 class App extends Component<{}, AppState> {
@@ -18,6 +19,7 @@ class App extends Component<{}, AppState> {
             searchTerm: '',
             items: [],
             error: null,
+            loading: false,
         }
     }
 
@@ -38,29 +40,31 @@ class App extends Component<{}, AppState> {
     }
 
     fetchItems = () => {
+        this.setState({ loading: true, error: null })
         const { searchTerm } = this.state
         const query = searchTerm.trim()
         const url = query ? `https://dummyjson.com/products/search?limit=10&q=${query}` : 'https://dummyjson.com/products'
 
         axios.get<ProductListResponse>(url)
             .then(response => {
-                this.setState({ items: response.data.products, error: null })
+                this.setState({ items: response.data.products, loading: false })
             })
             .catch(error => {
                 console.error('API call failed', error)
-                this.setState({ error: 'Failed to fetch items' })
+                this.setState({ error: 'Failed to fetch items', loading: false })
                 throw new Error('Failed to fetch items')
             })
     }
 
     throwError = () => {
+        this.setState({ error: 'Error occured' })
         throw new Error('Test Error')
     }
 
 
     render() {
 
-        const { searchTerm, items } = this.state
+        const { searchTerm, items, error, loading } = this.state
 
         return (
             <ErrorBoundary>
@@ -77,6 +81,8 @@ class App extends Component<{}, AppState> {
                         </div>
                     </div>
                     <div className="bottom-section">
+                        {loading && <p className="info-message">Loading...</p>}
+                        {error && <p className="error-message">{error}</p>}
                         <ul>
                             {items.map(item => (
                                 <li key={item.id}>
