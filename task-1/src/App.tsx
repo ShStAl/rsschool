@@ -18,6 +18,13 @@ class App extends Component<{}, AppState> {
         this.setState({ searchTerm: event.target.value })
     }
 
+    handleSearchButtonClick = () => {
+        const { searchTerm } = this.state
+        const trimmedSearchTerm = searchTerm.trim()
+        localStorage.setItem('searchTerm', trimmedSearchTerm)
+    }
+
+
     render() {
 
         const { searchTerm } = this.state
@@ -30,7 +37,7 @@ class App extends Component<{}, AppState> {
                             <input className="search-input" placeholder="Type search here..." type="text"
                                    value={searchTerm}
                                    onChange={this.handleSearchInputChange} />
-                            <button className="search-btn">
+                            <button className="search-btn" onClick={this.handleSearchButtonClick}>
                                 Search
                             </button>
                         </div>
