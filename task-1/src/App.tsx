@@ -2,10 +2,12 @@ import './App.css'
 import { Component, ChangeEvent } from 'react'
 import axios from 'axios'
 import { Product, ProductListResponse } from './shared/types/product.ts'
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx'
 
 interface AppState {
     searchTerm: string;
     items: Product[],
+    error: string | null;
 }
 
 class App extends Component<{}, AppState> {
@@ -15,6 +17,7 @@ class App extends Component<{}, AppState> {
         this.state = {
             searchTerm: '',
             items: [],
+            error: null,
         }
     }
 
@@ -41,12 +44,17 @@ class App extends Component<{}, AppState> {
 
         axios.get<ProductListResponse>(url)
             .then(response => {
-                this.setState({ items: response.data.products })
-                console.log(this.state.items)
+                this.setState({ items: response.data.products, error: null })
             })
             .catch(error => {
                 console.error('API call failed', error)
+                this.setState({ error: 'Failed to fetch items' })
+                throw new Error('Failed to fetch items')
             })
+    }
+
+    throwError = () => {
+        throw new Error('Test Error')
     }
 
 
@@ -55,7 +63,7 @@ class App extends Component<{}, AppState> {
         const { searchTerm, items } = this.state
 
         return (
-            <>
+            <ErrorBoundary>
                 <div className="layout">
                     <div className="top-section">
                         <div className="search-bar">
@@ -65,6 +73,7 @@ class App extends Component<{}, AppState> {
                             <button className="search-btn" onClick={this.handleSearchButtonClick}>
                                 Search
                             </button>
+                            <button onClick={this.throwError}>Throw Error</button>
                         </div>
                     </div>
                     <div className="bottom-section">
@@ -78,7 +87,7 @@ class App extends Component<{}, AppState> {
                         </ul>
                     </div>
                 </div>
-            </>
+            </ErrorBoundary>
         )
     }
 }
