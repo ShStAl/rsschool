@@ -1,21 +1,22 @@
 import './App.css'
 import React, { useState, useEffect, ChangeEvent } from 'react'
-import axios from 'axios'
-import { Product, ProductListResponse } from './shared/types/product'
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'
 import SearchBar from './components/SearchBar/SearchBar'
 import ProductList from './components/ProductList/ProductList'
 import usePersistedSearchTerm from './hooks/usePersistedSearchTerm.ts'
+import useFetchItems from './hooks/useFetchItems.ts'
 
 const App: React.FC = () => {
     const [searchTerm, setSearchTerm] = usePersistedSearchTerm('searchTerm')
     const [input, setInput] = useState(searchTerm)
-    const [items, setItems] = useState<Product[]>([])
-    const [error, setError] = useState<string | null>(null)
-    const [loading, setLoading] = useState(false)
+    const { items, loading, error, fetchItems } = useFetchItems()
+
 
     useEffect(() => {
         fetchItems(searchTerm)
+        return () => {
+            setSearchTerm(input)
+        }
     }, [])
 
     const handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,26 +27,6 @@ const App: React.FC = () => {
     const handleSearchButtonClick = () => {
         setSearchTerm(input)
         fetchItems(input)
-    }
-
-    const fetchItems = (query: string) => {
-        setLoading(true)
-        setError(null)
-        const url = query
-            ? `https://dummyjson.com/products/search?limit=10&q=${query}`
-            : 'https://dummyjson.com/products'
-
-        axios
-            .get<ProductListResponse>(url)
-            .then((response) => {
-                setItems(response.data.products)
-                setLoading(false)
-            })
-            .catch((error) => {
-                console.error('API call failed', error)
-                setError('Failed to fetch items')
-                setLoading(false)
-            })
     }
 
     return (
