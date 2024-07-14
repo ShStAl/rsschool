@@ -1,52 +1,39 @@
-import React, { ChangeEvent } from 'react'
-import { Component } from 'react'
+import React, { ChangeEvent, useState, useEffect } from 'react'
 
 interface SearchBarProps {
-    searchTerm: string
-    onSearchInputChange: (event: ChangeEvent<HTMLInputElement>) => void
-    onSearchButtonClick: () => void
-    onThrowErrorClick: () => void
+    searchTerm: string;
+    onSearchInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onSearchButtonClick: () => void;
 }
 
-class SearchBar extends Component<SearchBarProps> {
-    constructor(props: SearchBarProps) {
-        super(props);
-        this.state = {
-            error: false,
-        };
-    }
+const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSearchInputChange, onSearchButtonClick }) => {
+    const [error, setError] = useState(false)
 
-    componentDidUpdate() {
-        if (this.state.error) {
-            throw new Error('Error happened!');
+    useEffect(() => {
+        if (error) {
+            throw new Error('Error happened!')
         }
+    }, [error])
+
+    const handleThrowErrorClick = () => {
+        setError(true)
     }
 
-    handleThrowErrorClick = () => {
-        this.setState({
-            error: true,
-        });
-    };
-
-    render() {
-        const { searchTerm, onSearchInputChange, onSearchButtonClick, onThrowErrorClick } = this.props;
-
-        return (
-            <div className="search-bar">
-                <input
-                    className="search-input"
-                    placeholder="Type product name here..."
-                    type="text"
-                    value={searchTerm}
-                    onChange={onSearchInputChange}
-                />
-                <button className="search-btn" onClick={onSearchButtonClick}>
-                    Search
-                </button>
-                <button onClick={this.handleThrowErrorClick}>Throw Error</button>
-            </div>
-        );
-    }
+    return (
+        <div className="search-bar">
+            <input
+                className="search-input"
+                placeholder="Type product name here..."
+                type="text"
+                value={searchTerm}
+                onChange={onSearchInputChange}
+            />
+            <button className="search-btn" onClick={onSearchButtonClick}>
+                Search
+            </button>
+            <button onClick={handleThrowErrorClick}>Throw Error</button>
+        </div>
+    )
 }
 
 export default SearchBar
