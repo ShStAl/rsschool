@@ -5,27 +5,27 @@ import { Product, ProductListResponse } from './shared/types/product'
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary'
 import SearchBar from './components/SearchBar/SearchBar'
 import ProductList from './components/ProductList/ProductList'
+import usePersistedSearchTerm from './hooks/usePersistedSearchTerm.ts'
 
 const App: React.FC = () => {
-    const [searchTerm, setSearchTerm] = useState('')
+    const [searchTerm, setSearchTerm] = usePersistedSearchTerm('searchTerm')
+    const [input, setInput] = useState(searchTerm)
     const [items, setItems] = useState<Product[]>([])
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        const savedSearchTerm = localStorage.getItem('searchTerm') || ''
-        setSearchTerm(savedSearchTerm)
-        fetchItems(savedSearchTerm)
+        fetchItems(searchTerm)
     }, [])
 
     const handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value)
+        const trimmedSearchTerm = event.target.value.trim()
+        setInput(trimmedSearchTerm)
     }
 
     const handleSearchButtonClick = () => {
-        const trimmedSearchTerm = searchTerm.trim()
-        localStorage.setItem('searchTerm', trimmedSearchTerm)
-        fetchItems(trimmedSearchTerm)
+        setSearchTerm(input)
+        fetchItems(input)
     }
 
     const fetchItems = (query: string) => {
@@ -53,7 +53,7 @@ const App: React.FC = () => {
             <div className="layout">
                 <div className="top-section">
                     <SearchBar
-                        searchTerm={searchTerm}
+                        searchTerm={input}
                         onSearchInputChange={handleSearchInputChange}
                         onSearchButtonClick={handleSearchButtonClick}
                     />
