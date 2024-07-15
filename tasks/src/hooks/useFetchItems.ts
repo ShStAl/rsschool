@@ -6,18 +6,22 @@ const useFetchItems = () => {
     const [items, setItems] = useState<Product[]>([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [totalPages, setTotalPages] = useState(1)
 
-    const fetchItems = (query: string) => {
+    const fetchItems = (query: string, page: number = 1) => {
         setLoading(true)
         setError(null)
+        const limit = 10
+        const offset = (page - 1) * limit
         const url = query
-            ? `https://dummyjson.com/products/search?limit=10&q=${query}`
-            : 'https://dummyjson.com/products'
+            ? `https://dummyjson.com/products/search?limit=${limit}&skip=${offset}&q=${query}`
+            : `https://dummyjson.com/products?limit=${limit}&skip=${offset}`
 
         axios
             .get<ProductListResponse>(url)
             .then((response) => {
                 setItems(response.data.products)
+                setTotalPages(Math.ceil(response.data.total / limit)) // Assuming the response has a total count
                 setLoading(false)
             })
             .catch((error) => {
@@ -27,7 +31,7 @@ const useFetchItems = () => {
             })
     }
 
-    return { items, loading, error, fetchItems }
+    return { items, loading, error, totalPages, fetchItems }
 }
 
 export default useFetchItems

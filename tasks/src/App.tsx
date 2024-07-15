@@ -10,6 +10,7 @@ function App() {
         <ErrorBoundary>
             <Routes>
                 <Route path="/" element={<Main />} />
+                <Route path="/search/:page" element={<Main />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </ErrorBoundary>
