@@ -1,0 +1,2 @@
+cd tasks
+npm run format:fix
