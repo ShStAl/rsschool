@@ -1,12 +1,16 @@
 import React, { ChangeEvent, useState, useEffect } from 'react'
 
 interface SearchBarProps {
-    searchTerm: string;
-    onSearchInputChange: (event: ChangeEvent<HTMLInputElement>) => void;
-    onSearchButtonClick: () => void;
+    searchTerm: string
+    onSearchInputChange: (event: ChangeEvent<HTMLInputElement>) => void
+    onSearchButtonClick: () => void
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ searchTerm, onSearchInputChange, onSearchButtonClick }) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+    searchTerm,
+    onSearchInputChange,
+    onSearchButtonClick,
+}) => {
     const [error, setError] = useState(false)
 
     useEffect(() => {

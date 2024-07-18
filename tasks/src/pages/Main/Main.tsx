@@ -19,11 +19,9 @@ function Main() {
 
     const showDetails = !!id
 
-
     useEffect(() => {
         fetchItems(searchTerm, currentPage)
     }, [currentPage])
-
 
     const handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const trimmedSearchTerm = event.target.value.trim()
@@ -46,7 +44,6 @@ function Main() {
         }
     }
 
-
     return (
         <div className="layout">
             <div className="top-section">
@@ -62,7 +59,10 @@ function Main() {
                     {error && <p className="error-message">{error}</p>}
                     <ProductList items={items} onItemClick={handleItemClick} />
                     {!loading && !error && totalPages > 1 && (
-                        <Pagination currentPage={currentPage} totalPages={totalPages} />
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                        />
                     )}
                 </div>
                 {showDetails ? (

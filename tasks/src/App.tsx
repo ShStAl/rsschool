@@ -6,7 +6,6 @@ import NotFound from './pages/NotFound/NotFound.tsx'
 import ProductDetails from './components/ProductDetails/ProductDetails.tsx'
 
 function App() {
-
     return (
         <ErrorBoundary>
             <Routes>

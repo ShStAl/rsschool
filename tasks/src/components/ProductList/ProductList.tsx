@@ -1,8 +1,8 @@
 import { Product } from '../../shared/types/product'
 
 interface ProductListProps {
-    items: Product[];
-    onItemClick: (id: number) => void;
+    items: Product[]
+    onItemClick: (id: number) => void
 }
 
 function ProductList({ items, onItemClick }: ProductListProps) {

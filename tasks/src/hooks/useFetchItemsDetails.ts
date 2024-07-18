@@ -10,11 +10,11 @@ const useFetchItemDetails = () => {
         setLoading(true)
         axios
             .get<Product>(`https://dummyjson.com/products/${id}`)
-            .then(response => {
+            .then((response) => {
                 setItemDetails(response.data)
                 setLoading(false)
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Failed to fetch item details', error)
                 setLoading(false)
             })

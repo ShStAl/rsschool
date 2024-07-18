@@ -3,11 +3,11 @@ import useFetchItemDetails from '../../hooks/useFetchItemsDetails.ts'
 import { useEffect } from 'react'
 
 function ProductDetails() {
-
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
     const location = useLocation()
-    const { itemDetails, loading, fetchItemDetails, clearItemDetails } = useFetchItemDetails()
+    const { itemDetails, loading, fetchItemDetails, clearItemDetails } =
+        useFetchItemDetails()
 
     useEffect(() => {
         if (id) {
