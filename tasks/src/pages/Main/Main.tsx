@@ -3,40 +3,27 @@ import usePersistedSearchTerm from '../../hooks/usePersistedSearchTerm.ts'
 import useFetchItems from '../../hooks/useFetchItems.ts'
 import SearchBar from '../../components/SearchBar/SearchBar.tsx'
 import ProductList from '../../components/ProductList/ProductList.tsx'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Pagination from '../../components/Pagination/Pagination.tsx'
-import ProductDetails from '../../components/ProductDetails/ProductDetails.tsx'
-import useFetchItemDetails from '../../hooks/useFetchItemsDetails.ts'
 
 function Main() {
     const location = useLocation()
-    const queryParams = new URLSearchParams(location.search)
-    const detailId = queryParams.get('details')
 
-    const { page } = useParams<{ page?: string }>()
+    const { page, id } = useParams<{ page?: string; id?: string }>()
     const currentPage = page ? parseInt(page, 10) : 1
     const navigate = useNavigate()
 
     const [searchTerm, setSearchTerm] = usePersistedSearchTerm('searchTerm')
     const [input, setInput] = useState(searchTerm)
     const { items, loading, error, fetchItems, totalPages } = useFetchItems()
-    const { itemDetails, loading: detailsLoading, fetchItemDetails, clearItemDetails } = useFetchItemDetails()
 
-    const [showDetails, setShowDetails] = useState<boolean>(!!detailId)
+    const showDetails = !!id
 
 
     useEffect(() => {
         fetchItems(searchTerm, currentPage)
     }, [currentPage])
 
-    useEffect(() => {
-        if (detailId) {
-            fetchItemDetails(detailId)
-            setShowDetails(true)
-        } else {
-            setShowDetails(false)
-        }
-    }, [detailId])
 
     const handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const trimmedSearchTerm = event.target.value.trim()
@@ -47,22 +34,16 @@ function Main() {
         setSearchTerm(input)
         fetchItems(input, 1)
         navigate(`/search/1`)
-        setShowDetails(false)
     }
 
     const handleItemClick = (id: number) => {
-        navigate(`/search/${currentPage}?details=${id}`)
-        setShowDetails(true)
+        navigate(`details/${id}`, { relative: 'route' })
     }
 
-    const handleCloseDetails = () => {
-        navigate(`/search/${currentPage}`)
-        clearItemDetails()
-        setShowDetails(false)
-    }
-
-    const handleLeftSectionClick = () => {
-        setShowDetails(false)
+    const handleLeftSectionClick = (event: React.MouseEvent) => {
+        if (event.target === event.currentTarget && showDetails) {
+            navigate(location.pathname.split('/details')[0])
+        }
     }
 
 
@@ -84,16 +65,11 @@ function Main() {
                         <Pagination currentPage={currentPage} totalPages={totalPages} />
                     )}
                 </div>
-                {showDetails && (
+                {showDetails ? (
                     <div className="right-section">
-                        <button onClick={handleCloseDetails}>Close</button>
-                        {detailsLoading ? (
-                            <p>Loading...</p>
-                        ) : (
-                            <ProductDetails details={itemDetails} />
-                        )}
+                        <Outlet />
                     </div>
-                )}
+                ) : undefined}
             </div>
         </div>
     )

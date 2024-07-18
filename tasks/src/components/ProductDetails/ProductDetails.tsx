@@ -1,19 +1,47 @@
-import { Product } from '../../shared/types/product'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import useFetchItemDetails from '../../hooks/useFetchItemsDetails.ts'
+import { useEffect } from 'react'
 
-interface ProductDetailsProps {
-    details: Product | null
-}
+function ProductDetails() {
 
-function ProductDetails({ details }: ProductDetailsProps) {
+    const { id } = useParams<{ id: string }>()
+    const navigate = useNavigate()
+    const location = useLocation()
+    const { itemDetails, loading, fetchItemDetails, clearItemDetails } = useFetchItemDetails()
+
+    useEffect(() => {
+        if (id) {
+            fetchItemDetails(id)
+        }
+        return () => {
+            clearItemDetails()
+        }
+    }, [id])
+
+    const handleCloseDetails = () => {
+        navigate(location.pathname.split('/details')[0])
+    }
+
+    if (loading) {
+        return <p>Loading...</p>
+    }
+
     return (
         <div>
-            <h2>Product Details</h2>
-            <h2>
-                {details?.title}, {details?.price}
-            </h2>
-            <p>{details?.description}</p>
-            <p>Rating: {details?.rating}</p>
-            <p>Review: {details?.reviews[0].comment}</p>
+            <button onClick={handleCloseDetails}>Close</button>
+            {itemDetails ? (
+                <div>
+                    <h2>Product Details</h2>
+                    <h2>
+                        {itemDetails?.title}, {itemDetails?.price}
+                    </h2>
+                    <p>{itemDetails?.description}</p>
+                    <p>Rating: {itemDetails?.rating}</p>
+                    <p>Review: {itemDetails?.reviews[0].comment}</p>
+                </div>
+            ) : (
+                <p>No details available</p>
+            )}
         </div>
     )
 }
