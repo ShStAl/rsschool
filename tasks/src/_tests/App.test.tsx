@@ -1,11 +1,12 @@
-import { describe, it, expect } from 'vitest'
+import { test } from 'vitest'
+import { render } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
+import App from '../App.tsx'
 
-describe('something truthy and falsy', () => {
-    it('true to be true', () => {
-        expect(true).toBe(true)
-    })
-
-    it('false to be false', () => {
-        expect(false).toBe(false)
-    })
+test('renders without crashing', () => {
+    render(
+        <MemoryRouter>
+            <App />
+        </MemoryRouter>,
+    )
 })
