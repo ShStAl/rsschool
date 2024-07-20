@@ -19,6 +19,22 @@
     border-radius: 0 0 10% 10%;
 }
 
+.bottom-section {
+    background-color: #ffffff;
+    display: flex;
+}
+
+.left-section {
+    flex: 1;
+    padding: 20px;
+}
+
+.right-section {
+    flex: 1;
+    padding: 20px;
+    border-left: 1px solid #ccc;
+}
+
 .search-bar {
     width: 400px;
     display: flex;
@@ -90,8 +106,4 @@ ul {
 .search-btn:focus,
 .search-btn:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
-}
-
-.bottom-section {
-    background-color: #ffffff;
 }
