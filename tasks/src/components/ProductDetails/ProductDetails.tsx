@@ -37,7 +37,7 @@ function ProductDetails() {
                     </h2>
                     <p>{itemDetails?.description}</p>
                     <p>Rating: {itemDetails?.rating}</p>
-                    <p>Review: {itemDetails?.reviews[0].comment}</p>
+                    <p>Review: {itemDetails?.reviews && itemDetails?.reviews[0].comment}</p>
                 </div>
             ) : (
                 <p>No details available</p>
