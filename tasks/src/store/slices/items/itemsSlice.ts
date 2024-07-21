@@ -3,9 +3,9 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { Product } from '../../../shared/types/product.ts'
 
 export interface ItemsState {
-    totalPages: number,
-    itemDetails: Product | null,
-    pageItems: Product[],
+    totalPages: number
+    itemDetails: Product | null
+    pageItems: Product[]
 }
 
 const initialState: ItemsState = {
@@ -30,6 +30,7 @@ export const itemsSlice = createSlice({
     },
 })
 
-export const { setTotalPages, setItemDetails, setPageItems } = itemsSlice.actions
+export const { setTotalPages, setItemDetails, setPageItems } =
+    itemsSlice.actions
 
 export default itemsSlice.reducer

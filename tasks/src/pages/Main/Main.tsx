@@ -1,22 +1,27 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import usePersistedSearchTerm from '../../hooks/usePersistedSearchTerm.ts'
 import { useGetItemsQuery } from '../../services/itemsApi.ts'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxSetup.ts'
-import { setTotalPages, setPageItems, setItemDetails } from '../../store/slices/items/itemsSlice.ts'
+import {
+    setTotalPages,
+    setPageItems,
+    setItemDetails,
+} from '../../store/slices/items/itemsSlice.ts'
 import SearchBar from '../../components/SearchBar/SearchBar.tsx'
 import ProductList from '../../components/ProductList/ProductList.tsx'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Pagination from '../../components/Pagination/Pagination.tsx'
+import { ThemeContext } from '../../shared/context/ThemeContext.tsx'
 
 function Main() {
     const location = useLocation()
+    const navigate = useNavigate()
+    const dispatch = useAppDispatch()
+    const { theme, toggleTheme } = useContext(ThemeContext)
 
     const { page, id } = useParams<{ page?: string; id?: string }>()
     const currentPage = page ? parseInt(page, 10) : 1
     const showDetails = !!id
-
-    const navigate = useNavigate()
-    const dispatch = useAppDispatch()
 
     const [searchTerm, setSearchTerm] = usePersistedSearchTerm('searchTerm')
     const [input, setInput] = useState(searchTerm)
@@ -58,15 +63,18 @@ function Main() {
     }
 
     return (
-        <div className="layout">
-            <div className="top-section">
+        <div className={`layout ${theme}`}>
+            <div className={`top-section ${theme}`}>
+                <button onClick={toggleTheme}>
+                    Toggle to {theme === 'light' ? 'Dark' : 'Light'} Theme
+                </button>
                 <SearchBar
                     searchTerm={input}
                     onSearchInputChange={handleSearchInputChange}
                     onSearchButtonClick={handleSearchButtonClick}
                 />
             </div>
-            <div className="bottom-section">
+            <div className={`bottom-section ${theme}`}>
                 <div className="left-section" onClick={handleLeftSectionClick}>
                     {isFetching && <p className="info-message">Loading...</p>}
                     {error && (
@@ -84,7 +92,7 @@ function Main() {
                     )}
                 </div>
                 {showDetails ? (
-                    <div className="right-section">
+                    <div className={`right-section ${theme}`}>
                         <Outlet />
                     </div>
                 ) : undefined}
