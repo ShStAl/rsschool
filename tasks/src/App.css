@@ -150,3 +150,14 @@ ul {
     color: #ffffff;
     border-color: #ffffff;
 }
+
+.checkbox {
+    background-color: white;
+}
+
+.product-button {
+    color: #646cff;
+    font-size: 16px;
+    background-color: transparent;
+    border: none;
+}

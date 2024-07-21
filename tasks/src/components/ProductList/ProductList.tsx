@@ -1,4 +1,6 @@
 import { Product } from '../../shared/types/product'
+import { useAppSelector, useAppDispatch } from '../../hooks/reduxSetup.ts'
+import { toggleItemSelection } from '../../store/slices/items/itemsSlice.ts'
 
 interface ProductListProps {
     items: Product[] | undefined
@@ -6,13 +8,26 @@ interface ProductListProps {
 }
 
 function ProductList({ items, onItemClick }: ProductListProps) {
+    const dispatch = useAppDispatch()
+    const selectedItems = useAppSelector((state) => state.items.selectedItems)
+
+    const handleCheckboxChange = (id: number) => {
+        dispatch(toggleItemSelection(id))
+    }
+
     return (
         <ul>
             {items?.map((item) => (
-                <li key={item.id} onClick={() => onItemClick(item.id)}>
-                    <h2>
+                <li key={item.id}>
+                    <input className="checkbox"
+                           type="checkbox"
+                           checked={selectedItems.includes(item.id)}
+                           onChange={() => handleCheckboxChange(item.id)}
+                    />
+                    <button className="product-button"
+                            onClick={() => onItemClick(item.id)}>
                         {item.title}, {item.price}
-                    </h2>
+                    </button>
                     <p>{item.description}</p>
                 </li>
             ))}
