@@ -5,7 +5,7 @@ function ProductDetails() {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
     const location = useLocation()
-    const { data, isLoading, error } = useGetItemDetailsQuery(id)
+    const { data, isFetching, error } = useGetItemDetailsQuery(id)
 
     const handleCloseDetails = () => {
         navigate(location.pathname.split('/details')[0])
@@ -18,7 +18,7 @@ function ProductDetails() {
     return (
         <div>
             <button onClick={handleCloseDetails}>Close</button>
-            {isLoading && <p>Loading...</p>}
+            {isFetching && <p>Loading...</p>}
             {data ? (
                 <div>
                     <h2>Product Details</h2>

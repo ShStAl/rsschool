@@ -1,14 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { Product } from '../../../shared/types/product.ts'
 
 export interface ItemsState {
-    totalPages: number
-    currentPage: number
+    totalPages: number,
+    itemDetails: Product | null,
+    pageItems: Product[],
 }
 
 const initialState: ItemsState = {
     totalPages: 0,
-    currentPage: 1,
+    itemDetails: null,
+    pageItems: [],
 }
 
 export const itemsSlice = createSlice({
@@ -18,12 +21,15 @@ export const itemsSlice = createSlice({
         setTotalPages: (state, action: PayloadAction<number>) => {
             state.totalPages = action.payload
         },
-        setCurrentPage: (state, action: PayloadAction<number>) => {
-            state.currentPage = action.payload
+        setItemDetails: (state, action: PayloadAction<Product>) => {
+            state.itemDetails = action.payload
+        },
+        setPageItems: (state, action: PayloadAction<Product[]>) => {
+            state.pageItems = action.payload
         },
     },
 })
 
-export const { setTotalPages, setCurrentPage } = itemsSlice.actions
+export const { setTotalPages, setItemDetails, setPageItems } = itemsSlice.actions
 
 export default itemsSlice.reducer

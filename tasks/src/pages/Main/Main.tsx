@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import usePersistedSearchTerm from '../../hooks/usePersistedSearchTerm.ts'
 import { useGetItemsQuery } from '../../services/itemsApi.ts'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxSetup.ts'
-import { setTotalPages } from '../../store/slices/items/itemsSlice.ts'
+import { setTotalPages, setPageItems, setItemDetails } from '../../store/slices/items/itemsSlice.ts'
 import SearchBar from '../../components/SearchBar/SearchBar.tsx'
 import ProductList from '../../components/ProductList/ProductList.tsx'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -13,23 +13,23 @@ function Main() {
 
     const { page, id } = useParams<{ page?: string; id?: string }>()
     const currentPage = page ? parseInt(page, 10) : 1
+    const showDetails = !!id
+
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
 
     const [searchTerm, setSearchTerm] = usePersistedSearchTerm('searchTerm')
     const [input, setInput] = useState(searchTerm)
-    const totalPages = useAppSelector((state) => state.items.totalPages)
-    const { data, isLoading, error } = useGetItemsQuery({
+    const { totalPages, pageItems } = useAppSelector((state) => state.items)
+    const { data, isFetching, error } = useGetItemsQuery({
         query: searchTerm,
         page: currentPage,
     })
 
-    const dispatch = useAppDispatch()
-
-    const showDetails = !!id
-
     useEffect(() => {
         if (data) {
             dispatch(setTotalPages(Math.ceil(data.total / 10)))
+            dispatch(setPageItems(data.products))
         }
     }, [data])
 
@@ -45,6 +45,10 @@ function Main() {
 
     const handleItemClick = (id: number) => {
         navigate(`details/${id}`, { relative: 'route' })
+        const itemDetails = pageItems.find((item) => item.id === id)
+        if (itemDetails) {
+            dispatch(setItemDetails(itemDetails))
+        }
     }
 
     const handleLeftSectionClick = (event: React.MouseEvent) => {
@@ -64,7 +68,7 @@ function Main() {
             </div>
             <div className="bottom-section">
                 <div className="left-section" onClick={handleLeftSectionClick}>
-                    {isLoading && <p className="info-message">Loading...</p>}
+                    {isFetching && <p className="info-message">Loading...</p>}
                     {error && (
                         <p className="error-message">There was an error!</p>
                     )}
@@ -72,7 +76,7 @@ function Main() {
                         items={data?.products}
                         onItemClick={handleItemClick}
                     />
-                    {!isLoading && !error && totalPages > 1 && (
+                    {!isFetching && !error && totalPages > 1 && (
                         <Pagination
                             currentPage={currentPage}
                             totalPages={totalPages}
