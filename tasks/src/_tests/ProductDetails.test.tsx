@@ -8,7 +8,7 @@ describe('ProductDetails', () => {
         render(
             <BrowserRouter>
                 <ProductDetails />
-            </BrowserRouter>,
+            </BrowserRouter>
         )
 
         const closeButton = screen.getByText('Close')

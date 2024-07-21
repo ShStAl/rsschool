@@ -7,14 +7,14 @@ describe('SearchBar', () => {
         render(
             <SearchBar
                 searchTerm=""
-                onSearchInputChange={() => {
-                }}
-                onSearchButtonClick={() => {
-                }}
-            />,
+                onSearchInputChange={() => {}}
+                onSearchButtonClick={() => {}}
+            />
         )
 
-        expect(screen.getByPlaceholderText('Type product name here...')).toBeInTheDocument()
+        expect(
+            screen.getByPlaceholderText('Type product name here...')
+        ).toBeInTheDocument()
         expect(screen.getByText('Search')).toBeInTheDocument()
         expect(screen.getByText('Throw Error')).toBeInTheDocument()
     })
@@ -25,9 +25,8 @@ describe('SearchBar', () => {
             <SearchBar
                 searchTerm=""
                 onSearchInputChange={handleChange}
-                onSearchButtonClick={() => {
-                }}
-            />,
+                onSearchButtonClick={() => {}}
+            />
         )
 
         const input = screen.getByPlaceholderText('Type product name here...')
@@ -40,10 +39,9 @@ describe('SearchBar', () => {
         render(
             <SearchBar
                 searchTerm=""
-                onSearchInputChange={() => {
-                }}
+                onSearchInputChange={() => {}}
                 onSearchButtonClick={handleClick}
-            />,
+            />
         )
 
         const button = screen.getByText('Search')
@@ -52,18 +50,15 @@ describe('SearchBar', () => {
     })
 
     test('throws error on Throw Error button click', () => {
-        vi.spyOn(console, 'error').mockImplementation(() => {
-        }) // Suppress error output in test
+        vi.spyOn(console, 'error').mockImplementation(() => {}) // Suppress error output in test
 
         expect(() => {
             render(
                 <SearchBar
                     searchTerm=""
-                    onSearchInputChange={() => {
-                    }}
-                    onSearchButtonClick={() => {
-                    }}
-                />,
+                    onSearchInputChange={() => {}}
+                    onSearchButtonClick={() => {}}
+                />
             )
 
             const button = screen.getByText('Throw Error')

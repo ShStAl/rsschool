@@ -13,7 +13,10 @@ describe('useFetchItems', () => {
     it('should fetch items successfully', async () => {
         const mockResponse = {
             data: {
-                products: [{ id: 1, name: 'Product 1' }, { id: 2, name: 'Product 2' }],
+                products: [
+                    { id: 1, name: 'Product 1' },
+                    { id: 2, name: 'Product 2' },
+                ],
                 total: 20,
             },
         }
@@ -52,7 +55,9 @@ describe('useFetchItems', () => {
                 total: 1,
             },
         }
-        const axiosGetSpy = vi.spyOn(axios, 'get').mockResolvedValue(mockResponse)
+        const axiosGetSpy = vi
+            .spyOn(axios, 'get')
+            .mockResolvedValue(mockResponse)
 
         const { result } = renderHook(() => useFetchItems())
 
@@ -61,7 +66,7 @@ describe('useFetchItems', () => {
         })
 
         expect(axiosGetSpy).toHaveBeenCalledWith(
-            'https://dummyjson.com/products/search?limit=10&skip=10&q=searchQuery',
+            'https://dummyjson.com/products/search?limit=10&skip=10&q=searchQuery'
         )
     })
 })

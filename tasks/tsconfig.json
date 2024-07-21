@@ -1,18 +1,16 @@
 {
-  "files": [],
-  "compilerOptions": {
-    // ... other options
-    "types": [
-      "@testing-library/jest-dom"
-    ]
-    // ... other options
-  },
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
+    "files": [],
+    "compilerOptions": {
+        // ... other options
+        "types": ["@testing-library/jest-dom"]
+        // ... other options
     },
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+    "references": [
+        {
+            "path": "./tsconfig.app.json"
+        },
+        {
+            "path": "./tsconfig.node.json"
+        }
+    ]
 }

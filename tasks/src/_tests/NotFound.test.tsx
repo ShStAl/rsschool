@@ -7,6 +7,8 @@ describe('NotFound', () => {
         render(<NotFound />)
 
         expect(screen.getByText('404 - Page Not Found')).toBeInTheDocument()
-        expect(screen.getByText('The page you are looking for does not exist.')).toBeInTheDocument()
+        expect(
+            screen.getByText('The page you are looking for does not exist.')
+        ).toBeInTheDocument()
     })
 })

@@ -1,14 +1,14 @@
 import { Product } from '../../shared/types/product'
 
 interface ProductListProps {
-    items: Product[]
+    items: Product[] | undefined
     onItemClick: (id: number) => void
 }
 
 function ProductList({ items, onItemClick }: ProductListProps) {
     return (
         <ul>
-            {items.map((item) => (
+            {items?.map((item) => (
                 <li key={item.id} onClick={() => onItemClick(item.id)}>
                     <h2>
                         {item.title}, {item.price}

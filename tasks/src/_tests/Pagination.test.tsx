@@ -3,13 +3,12 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import Pagination from '../components/Pagination/Pagination.tsx'
 
-
 describe('Pagination', () => {
     test('renders pagination buttons', () => {
         render(
             <BrowserRouter>
                 <Pagination currentPage={1} totalPages={5} />
-            </BrowserRouter>,
+            </BrowserRouter>
         )
 
         expect(screen.getByText('1')).toBeInTheDocument()
@@ -23,7 +22,7 @@ describe('Pagination', () => {
         render(
             <BrowserRouter>
                 <Pagination currentPage={1} totalPages={5} />
-            </BrowserRouter>,
+            </BrowserRouter>
         )
 
         const button = screen.getByText('1')
