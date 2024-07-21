@@ -161,3 +161,25 @@ ul {
     background-color: transparent;
     border: none;
 }
+
+.selected-items {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background-color: #7f7f7f;
+    border-radius: 10px;
+}
+
+.selected-items-text {
+    color: white;
+    font-size: 14px;
+}
+
+.selected-items-button {
+    background-color: #646cff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}

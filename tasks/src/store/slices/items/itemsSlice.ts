@@ -6,7 +6,7 @@ export interface ItemsState {
     totalPages: number
     itemDetails: Product | null
     pageItems: Product[]
-    selectedItems: number[],
+    selectedItems: Product[],
 }
 
 const initialState: ItemsState = {
@@ -29,7 +29,7 @@ export const itemsSlice = createSlice({
         setPageItems: (state, action: PayloadAction<Product[]>) => {
             state.pageItems = action.payload
         },
-        toggleItemSelection: (state, action: PayloadAction<number>) => {
+        toggleItemSelection: (state, action: PayloadAction<Product>) => {
             const index = state.selectedItems.indexOf(action.payload)
             if (index === -1) {
                 state.selectedItems.push(action.payload)
@@ -37,10 +37,13 @@ export const itemsSlice = createSlice({
                 state.selectedItems.splice(index, 1)
             }
         },
+        clearItemsSelection: (state) => {
+            state.selectedItems = []
+        },
     },
 })
 
-export const { setTotalPages, setItemDetails, setPageItems, toggleItemSelection } =
+export const { setTotalPages, setItemDetails, setPageItems, toggleItemSelection, clearItemsSelection } =
     itemsSlice.actions
 
 export default itemsSlice.reducer

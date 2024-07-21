@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react'
 import usePersistedSearchTerm from '../../hooks/usePersistedSearchTerm.ts'
 import { useGetItemsQuery } from '../../services/itemsApi.ts'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxSetup.ts'
@@ -6,12 +6,14 @@ import {
     setTotalPages,
     setPageItems,
     setItemDetails,
+    clearItemsSelection,
 } from '../../store/slices/items/itemsSlice.ts'
 import SearchBar from '../../components/SearchBar/SearchBar.tsx'
 import ProductList from '../../components/ProductList/ProductList.tsx'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Pagination from '../../components/Pagination/Pagination.tsx'
 import { ThemeContext } from '../../shared/context/ThemeContext.tsx'
+
 
 function Main() {
     const location = useLocation()
@@ -25,11 +27,14 @@ function Main() {
 
     const [searchTerm, setSearchTerm] = usePersistedSearchTerm('searchTerm')
     const [input, setInput] = useState(searchTerm)
-    const { totalPages, pageItems } = useAppSelector((state) => state.items)
+    const { totalPages, pageItems, selectedItems } = useAppSelector((state) => state.items)
     const { data, isFetching, error } = useGetItemsQuery({
         query: searchTerm,
         page: currentPage,
     })
+    const showPopup = selectedItems.length > 0
+    const downloadLinkRef = useRef<HTMLAnchorElement>(null)
+
 
     useEffect(() => {
         if (data) {
@@ -60,6 +65,28 @@ function Main() {
         if (event.target === event.currentTarget && showDetails) {
             navigate(location.pathname.split('/details')[0])
         }
+    }
+
+    const generateCsvData = () => {
+        const csvHeader = 'Name,Price,Rating\n'
+        const csvRows = selectedItems.map(item => `${item.title},${item.price},${item.rating}`).join('\n')
+        return `${csvHeader}${csvRows}`
+    }
+
+    const handleDownload = () => {
+        const csvData = generateCsvData()
+        const blob = new Blob([csvData], { type: 'text/csv' })
+        const url = window.URL.createObjectURL(blob)
+        if (downloadLinkRef.current) {
+            downloadLinkRef.current.href = url
+            downloadLinkRef.current.download = `${selectedItems.length}_products.csv`
+            downloadLinkRef.current.click()
+            window.URL.revokeObjectURL(url)
+        }
+    }
+
+    const handleItemsUnselect = () => {
+        dispatch(clearItemsSelection())
     }
 
     return (
@@ -97,6 +124,17 @@ function Main() {
                     </div>
                 ) : undefined}
             </div>
+            {showPopup ? (
+                <div className="selected-items">
+                    <p className="selected-items-text">{selectedItems.length} items are selected</p>
+                    <button className="selected-items-button" onClick={() => handleDownload()}>
+                        Download
+                    </button>
+                    <a ref={downloadLinkRef} style={{ display: 'none' }}>Download Link</a>
+                    <button className="selected-items-button" onClick={() => handleItemsUnselect()}>Unselect all
+                    </button>
+                </div>
+            ) : undefined}
         </div>
     )
 }

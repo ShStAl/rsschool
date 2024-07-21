@@ -11,8 +11,8 @@ function ProductList({ items, onItemClick }: ProductListProps) {
     const dispatch = useAppDispatch()
     const selectedItems = useAppSelector((state) => state.items.selectedItems)
 
-    const handleCheckboxChange = (id: number) => {
-        dispatch(toggleItemSelection(id))
+    const handleCheckboxChange = (product: Product) => {
+        dispatch(toggleItemSelection(product))
     }
 
     return (
@@ -21,8 +21,8 @@ function ProductList({ items, onItemClick }: ProductListProps) {
                 <li key={item.id}>
                     <input className="checkbox"
                            type="checkbox"
-                           checked={selectedItems.includes(item.id)}
-                           onChange={() => handleCheckboxChange(item.id)}
+                           checked={selectedItems.includes(item)}
+                           onChange={() => handleCheckboxChange(item)}
                     />
                     <button className="product-button"
                             onClick={() => onItemClick(item.id)}>
