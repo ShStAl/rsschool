@@ -6,7 +6,7 @@ export interface ItemsState {
     totalPages: number
     itemDetails: Product | null
     pageItems: Product[]
-    selectedItems: Product[],
+    selectedItems: Product[]
 }
 
 const initialState: ItemsState = {
@@ -43,7 +43,12 @@ export const itemsSlice = createSlice({
     },
 })
 
-export const { setTotalPages, setItemDetails, setPageItems, toggleItemSelection, clearItemsSelection } =
-    itemsSlice.actions
+export const {
+    setTotalPages,
+    setItemDetails,
+    setPageItems,
+    toggleItemSelection,
+    clearItemsSelection,
+} = itemsSlice.actions
 
 export default itemsSlice.reducer

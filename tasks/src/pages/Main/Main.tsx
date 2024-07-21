@@ -14,7 +14,6 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Pagination from '../../components/Pagination/Pagination.tsx'
 import { ThemeContext } from '../../shared/context/ThemeContext.tsx'
 
-
 function Main() {
     const location = useLocation()
     const navigate = useNavigate()
@@ -27,14 +26,15 @@ function Main() {
 
     const [searchTerm, setSearchTerm] = usePersistedSearchTerm('searchTerm')
     const [input, setInput] = useState(searchTerm)
-    const { totalPages, pageItems, selectedItems } = useAppSelector((state) => state.items)
+    const { totalPages, pageItems, selectedItems } = useAppSelector(
+        (state) => state.items
+    )
     const { data, isFetching, error } = useGetItemsQuery({
         query: searchTerm,
         page: currentPage,
     })
     const showPopup = selectedItems.length > 0
     const downloadLinkRef = useRef<HTMLAnchorElement>(null)
-
 
     useEffect(() => {
         if (data) {
@@ -69,7 +69,9 @@ function Main() {
 
     const generateCsvData = () => {
         const csvHeader = 'Name,Price,Rating\n'
-        const csvRows = selectedItems.map(item => `${item.title},${item.price},${item.rating}`).join('\n')
+        const csvRows = selectedItems
+            .map((item) => `${item.title},${item.price},${item.rating}`)
+            .join('\n')
         return `${csvHeader}${csvRows}`
     }
 
@@ -126,12 +128,23 @@ function Main() {
             </div>
             {showPopup ? (
                 <div className="selected-items">
-                    <p className="selected-items-text">{selectedItems.length} items are selected</p>
-                    <button className="selected-items-button" onClick={() => handleDownload()}>
+                    <p className="selected-items-text">
+                        {selectedItems.length} items are selected
+                    </p>
+                    <button
+                        className="selected-items-button"
+                        onClick={() => handleDownload()}
+                    >
                         Download
                     </button>
-                    <a ref={downloadLinkRef} style={{ display: 'none' }}>Download Link</a>
-                    <button className="selected-items-button" onClick={() => handleItemsUnselect()}>Unselect all
+                    <a ref={downloadLinkRef} style={{ display: 'none' }}>
+                        Download Link
+                    </a>
+                    <button
+                        className="selected-items-button"
+                        onClick={() => handleItemsUnselect()}
+                    >
+                        Unselect all
                     </button>
                 </div>
             ) : undefined}

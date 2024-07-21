@@ -19,13 +19,16 @@ function ProductList({ items, onItemClick }: ProductListProps) {
         <ul>
             {items?.map((item) => (
                 <li key={item.id}>
-                    <input className="checkbox"
-                           type="checkbox"
-                           checked={selectedItems.includes(item)}
-                           onChange={() => handleCheckboxChange(item)}
+                    <input
+                        className="checkbox"
+                        type="checkbox"
+                        checked={selectedItems.includes(item)}
+                        onChange={() => handleCheckboxChange(item)}
                     />
-                    <button className="product-button"
-                            onClick={() => onItemClick(item.id)}>
+                    <button
+                        className="product-button"
+                        onClick={() => onItemClick(item.id)}
+                    >
                         {item.title}, {item.price}
                     </button>
                     <p>{item.description}</p>
