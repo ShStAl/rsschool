@@ -15,7 +15,7 @@ const useFetchItems = () => {
         const offset = (page - 1) * limit
         const url = query
             ? `https://dummyjson.com/products/search?limit=${limit}&skip=${offset}&q=${query}`
-            : `https://dummyjson.com/products?limit=${limit}&skip=${offset}`
+            : `https://dummyjson.com/products?limit=0&skip=${offset}`
 
         axios
             .get<ProductListResponse>(url)

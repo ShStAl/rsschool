@@ -1,43 +1,33 @@
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import useFetchItemDetails from '../../hooks/useFetchItemsDetails.ts'
-import { useEffect } from 'react'
+import { useGetItemDetailsQuery } from '../../services/itemsApi.ts'
 
 function ProductDetails() {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
     const location = useLocation()
-    const { itemDetails, loading, fetchItemDetails, clearItemDetails } =
-        useFetchItemDetails()
-
-    useEffect(() => {
-        if (id) {
-            fetchItemDetails(id)
-        }
-        return () => {
-            clearItemDetails()
-        }
-    }, [id])
+    const { data, isFetching, error } = useGetItemDetailsQuery(id)
 
     const handleCloseDetails = () => {
         navigate(location.pathname.split('/details')[0])
     }
 
-    if (loading) {
-        return <p>Loading...</p>
+    if (error) {
+        return <p>There was an error!</p>
     }
 
     return (
         <div>
             <button onClick={handleCloseDetails}>Close</button>
-            {itemDetails ? (
+            {isFetching && <p>Loading...</p>}
+            {data ? (
                 <div>
                     <h2>Product Details</h2>
                     <h2>
-                        {itemDetails?.title}, {itemDetails?.price}
+                        {data?.title}, {data?.price}
                     </h2>
-                    <p>{itemDetails?.description}</p>
-                    <p>Rating: {itemDetails?.rating}</p>
-                    <p>Review: {itemDetails?.reviews[0].comment}</p>
+                    <p>{data?.description}</p>
+                    <p>Rating: {data?.rating}</p>
+                    <p>Review: {data?.reviews && data?.reviews[0].comment}</p>
                 </div>
             ) : (
                 <p>No details available</p>
