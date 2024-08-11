@@ -1,4 +1,5 @@
-import React, { ChangeEvent, useState, useEffect } from 'react'
+import React, { ChangeEvent, useState, useEffect, useContext } from 'react'
+import { ThemeContext } from '../../shared/context/ThemeContext.tsx'
 
 interface SearchBarProps {
     searchTerm: string
@@ -13,6 +14,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
     const [error, setError] = useState(false)
 
+    const { theme } = useContext(ThemeContext)
+
     useEffect(() => {
         if (error) {
             throw new Error('Error happened!')
@@ -26,13 +29,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
     return (
         <div className="search-bar">
             <input
-                className="search-input"
+                className={`search-input ${theme}`}
                 placeholder="Type product name here..."
                 type="text"
                 value={searchTerm}
                 onChange={onSearchInputChange}
             />
-            <button className="search-btn" onClick={onSearchButtonClick}>
+            <button
+                className={`search-btn ${theme}`}
+                onClick={onSearchButtonClick}
+            >
                 Search
             </button>
             <button onClick={handleThrowErrorClick}>Throw Error</button>
