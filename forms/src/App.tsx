@@ -1,15 +1,15 @@
-function App() {
-  function x({}: any) {
-    return 1;
-  }
+import { Route, Routes } from "react-router-dom";
+import ControlledForm from "./pages/ControlledForm.tsx";
+import Main from "./pages/Main.tsx";
+import UncontrolledForm from "./pages/UncontrolledForm.tsx";
 
+function App() {
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-        {x({})}
-      </h1>
-    </>
+    <Routes>
+      <Route path="/" element={<Main />} />
+      <Route path="/uncontrolled" element={<UncontrolledForm />} />
+      <Route path="/controlled" element={<ControlledForm />} />
+    </Routes>
   );
 }
 
