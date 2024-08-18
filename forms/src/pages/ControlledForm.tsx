@@ -1,35 +1,20 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import schema from "../service/validation.ts";
 import { useDispatch } from "react-redux";
 import { setForm } from "../store/slices/controlledFormSlice.ts";
+import { convertBase64 } from "../helpers/base64.ts";
 
 function ControlledForm() {
   const dispatch = useDispatch();
-
-  function convertBase64(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-
-      reader.onload = () => {
-        if (reader.result && typeof reader.result === "string") {
-          resolve(reader.result);
-        } else {
-          reject(new Error("Failed to convert file to base64 string"));
-        }
-        reader.onerror = (error) => {
-          reject(error);
-        };
-      };
-    });
-  }
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<Yup.InferType<typeof schema>>({
     resolver: yupResolver(schema),
@@ -47,6 +32,8 @@ function ControlledForm() {
       country: rawData.country,
     };
     dispatch(setForm(data));
+    reset();
+    navigate("/");
   };
 
   return (

@@ -17,7 +17,13 @@ export const controlledFormSlice = createSlice({
   initialState,
   reducers: {
     setForm: (state, action: PayloadAction<IFormData>) => {
-      state = { ...state, ...action.payload };
+      state.name = action.payload.name;
+      state.age = action.payload.age;
+      state.email = action.payload.email;
+      state.password = action.payload.password;
+      state.gender = action.payload.gender;
+      state.image = action.payload.image;
+      state.country = action.payload.country;
     },
   },
 });
