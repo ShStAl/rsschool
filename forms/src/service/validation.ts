@@ -20,6 +20,7 @@ const schema = Yup.object().shape({
     "You must accept the terms and conditions",
   ),
   image: Yup.mixed<FileList>()
+    .required("Picture is required")
     .test(
       "fileType",
       "Unsupported File Format. Allowed formats: png, jpeg",
@@ -33,8 +34,7 @@ const schema = Yup.object().shape({
       if (!file) return true;
       const maxSize = 2 * 1024 * 1024; // 2MB
       return file && file[0]?.size <= maxSize;
-    })
-    .required("Picture is required"),
+    }),
   country: Yup.string().required("Country is required"),
 });
 

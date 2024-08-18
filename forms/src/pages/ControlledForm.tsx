@@ -3,8 +3,30 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import schema from "../service/validation.ts";
+import { useDispatch } from "react-redux";
+import { setForm } from "../store/slices/controlledFormSlice.ts";
 
 function ControlledForm() {
+  const dispatch = useDispatch();
+
+  function convertBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        if (reader.result && typeof reader.result === "string") {
+          resolve(reader.result);
+        } else {
+          reject(new Error("Failed to convert file to base64 string"));
+        }
+        reader.onerror = (error) => {
+          reject(error);
+        };
+      };
+    });
+  }
+
   const {
     register,
     handleSubmit,
@@ -13,8 +35,18 @@ function ControlledForm() {
     resolver: yupResolver(schema),
     mode: "all",
   });
-  const onSubmit = (data: Yup.InferType<typeof schema>) => {
-    console.log(data);
+  const onSubmit = async (rawData: Yup.InferType<typeof schema>) => {
+    const image = await convertBase64(rawData.image[0]);
+    const data = {
+      name: rawData.name,
+      age: rawData.age,
+      email: rawData.email,
+      password: rawData.password,
+      gender: rawData.gender,
+      image,
+      country: rawData.country,
+    };
+    dispatch(setForm(data));
   };
 
   return (
