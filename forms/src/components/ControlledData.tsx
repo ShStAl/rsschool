@@ -1,10 +1,12 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store.ts";
 
-function ControlledData() {
+function ControlledData({ highlighted }: { highlighted: string | null }) {
   const data = useSelector((state: RootState) => state.controlledForm);
   return (
-    <div className="w-96 h-96 px-6 py-3 bg-white rounded-md shadow-md">
+    <div
+      className={`w-96 h-96 px-6 py-3 bg-white rounded-md shadow-md transition duration-300 ${highlighted === "controlled" ? "bg-lime-200" : ""}`}
+    >
       <div className="flex flex-col gap-3 mt-4">
         <div className="flex items-center gap-5">
           <img

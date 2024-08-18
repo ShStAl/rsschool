@@ -3,13 +3,16 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import schema from "../service/validation.ts";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setForm } from "../store/slices/controlledFormSlice.ts";
 import { convertBase64 } from "../helpers/base64.ts";
+import { RootState } from "../store/store.ts";
 
 function ControlledForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { countries } = useSelector((state: RootState) => state.countries);
 
   const {
     register,
@@ -20,6 +23,7 @@ function ControlledForm() {
     resolver: yupResolver(schema),
     mode: "all",
   });
+
   const onSubmit = async (rawData: Yup.InferType<typeof schema>) => {
     const image = await convertBase64(rawData.image[0]);
     const data = {
@@ -33,7 +37,7 @@ function ControlledForm() {
     };
     dispatch(setForm(data));
     reset();
-    navigate("/");
+    navigate("/", { state: { highlight: "controlled" } });
   };
 
   return (
@@ -59,7 +63,11 @@ function ControlledForm() {
               type="text"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
-            {errors.name && <p>{errors.name.message}</p>}
+            {errors.name && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.name.message}
+              </p>
+            )}
           </div>
 
           <div>
@@ -72,7 +80,11 @@ function ControlledForm() {
               type="number"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
-            {errors.age && <p>{errors.age.message}</p>}
+            {errors.age && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.age.message}
+              </p>
+            )}
           </div>
 
           <div className="col-span-2">
@@ -85,7 +97,11 @@ function ControlledForm() {
               type="email"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
-            {errors.email && <p>{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div>
@@ -98,7 +114,11 @@ function ControlledForm() {
               type="password"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
-            {errors.password && <p>{errors.password.message}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           <div>
@@ -111,7 +131,11 @@ function ControlledForm() {
               type="password"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
-            {errors.passwordConfirm && <p>{errors.passwordConfirm.message}</p>}
+            {errors.passwordConfirm && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.passwordConfirm.message}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -129,7 +153,11 @@ function ControlledForm() {
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
-            {errors.gender && <p>{errors.gender.message}</p>}
+            {errors.gender && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.gender.message}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -143,11 +171,17 @@ function ControlledForm() {
               className="w-full py-2 block px-4 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             >
               <option value="">Select Country</option>
-              <option value="Argentina">Argentina</option>
-              <option value="Russia">Russia</option>
-              <option value="Other">Other</option>
+              {countries.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
             </select>
-            {errors.country && <p>{errors.country.message}</p>}
+            {errors.country && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.country.message}
+              </p>
+            )}
           </div>
 
           <div className="col-span-2">
@@ -160,21 +194,31 @@ function ControlledForm() {
               name="image"
               className="block w-full px-4 py-2 mt-2 text-gray-700 text-sm bg-white border border-gray-200 rounded-md file:bg-gray-200 file:text-gray-700 file:px-4 file:py-1 file:border-none file:rounded-full placeholder-gray-400/70 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
             />
-            {errors.image && <p>{errors.image.message}</p>}
+            {errors.image && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.image.message}
+              </p>
+            )}
           </div>
 
-          <div className="col-span-2 flex gap-2">
-            <input
-              {...register("terms")}
-              id="tc"
-              type="checkbox"
-              className="w-4 ml-3"
-            />
-            <label className="text-gray-700" htmlFor="tc">
-              Accept Terms and Conditions
-            </label>
+          <div className="col-span-2 mt-4">
+            <div className="flex gap-2">
+              <input
+                {...register("terms")}
+                id="tc"
+                type="checkbox"
+                className="w-4 ml-3"
+              />
+              <label className="text-gray-700" htmlFor="tc">
+                Accept Terms and Conditions
+              </label>
+            </div>
+            {errors.terms && (
+              <p className="col-span-2 ml-3 text-red-500 text-sm mb-[-20px]">
+                {errors.terms.message}
+              </p>
+            )}
           </div>
-          {errors.terms && <p className="col-span-2">{errors.terms.message}</p>}
         </div>
 
         <div className="flex justify-end mt-6">

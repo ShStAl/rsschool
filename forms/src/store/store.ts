@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import controlledForm from "./slices/controlledFormSlice";
 import uncontrolledForm from "./slices/uncontrolledFormSlice";
+import countries from "./slices/countriesSlice";
 
 export const store = configureStore({
   reducer: {
     controlledForm,
     uncontrolledForm,
+    countries,
   },
 });
 

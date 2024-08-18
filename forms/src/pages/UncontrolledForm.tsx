@@ -1,14 +1,17 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import schema from "../service/validation.ts";
 import { convertBase64 } from "../helpers/base64.ts";
 import { setForm } from "../store/slices/uncontrolledFormSlice.ts";
 import { useRef, useState } from "react";
+import { RootState } from "../store/store.ts";
 
 function UncontrolledForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { countries } = useSelector((state: RootState) => state.countries);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -27,7 +30,7 @@ function UncontrolledForm() {
     const rawData = {
       name: nameRef.current?.value,
       email: emailRef.current?.value,
-      age: parseInt(ageRef.current?.value || "0"),
+      age: ageRef.current?.value ? parseInt(ageRef.current?.value) : null,
       password: passwordRef.current?.value,
       passwordConfirm: passwordConfirmRef.current?.value,
       gender: genderRef.current?.value,
@@ -50,7 +53,7 @@ function UncontrolledForm() {
           country: rawData.country,
         };
         dispatch(setForm(data));
-        navigate("/");
+        navigate("/", { state: { highlight: "uncontrolled" } });
       }
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
@@ -88,7 +91,9 @@ function UncontrolledForm() {
               type="text"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
-            {errors.name && <p>{errors.name}</p>}
+            {errors.name && (
+              <p className="text-red-500 text-sm mb-[-20px]">{errors.name}</p>
+            )}
           </div>
 
           <div>
@@ -101,7 +106,9 @@ function UncontrolledForm() {
               type="number"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
-            {errors.age && <p>{errors.age}</p>}
+            {errors.age && (
+              <p className="text-red-500 text-sm mb-[-20px]">{errors.age}</p>
+            )}
           </div>
 
           <div className="col-span-2">
@@ -114,7 +121,9 @@ function UncontrolledForm() {
               type="email"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
-            {errors.email && <p>{errors.email}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm mb-[-20px]">{errors.email}</p>
+            )}
           </div>
 
           <div>
@@ -127,7 +136,11 @@ function UncontrolledForm() {
               type="password"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
-            {errors.password && <p>{errors.password}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.password}
+              </p>
+            )}
           </div>
 
           <div>
@@ -140,7 +153,11 @@ function UncontrolledForm() {
               type="password"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
-            {errors.passwordConfirm && <p>{errors.passwordConfirm}</p>}
+            {errors.passwordConfirm && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.passwordConfirm}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -158,7 +175,9 @@ function UncontrolledForm() {
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
-            {errors.gender && <p>{errors.gender}</p>}
+            {errors.gender && (
+              <p className="text-red-500 text-sm mb-[-20px]">{errors.gender}</p>
+            )}
           </div>
 
           <div className="flex flex-col">
@@ -172,11 +191,17 @@ function UncontrolledForm() {
               className="w-full py-2 block px-4 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             >
               <option value="">Select Country</option>
-              <option value="Argentina">Argentina</option>
-              <option value="Russia">Russia</option>
-              <option value="Other">Other</option>
+              {countries.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
             </select>
-            {errors.country && <p>{errors.country}</p>}
+            {errors.country && (
+              <p className="text-red-500 text-sm mb-[-20px]">
+                {errors.country}
+              </p>
+            )}
           </div>
 
           <div className="col-span-2">
@@ -189,21 +214,29 @@ function UncontrolledForm() {
               name="image"
               className="block w-full px-4 py-2 mt-2 text-gray-700 text-sm bg-white border border-gray-200 rounded-md file:bg-gray-200 file:text-gray-700 file:px-4 file:py-1 file:border-none file:rounded-full placeholder-gray-400/70 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
             />
-            {errors.image && <p>{errors.image}</p>}
+            {errors.image && (
+              <p className="text-red-500 text-sm mb-[-20px]">{errors.image}</p>
+            )}
           </div>
 
-          <div className="col-span-2 flex gap-2">
-            <input
-              ref={termsRef}
-              id="tc"
-              type="checkbox"
-              className="w-4 ml-3"
-            />
-            <label className="text-gray-700" htmlFor="tc">
-              Accept Terms and Conditions
-            </label>
+          <div className="col-span-2 mt-4">
+            <div className="flex gap-2">
+              <input
+                ref={termsRef}
+                id="tc"
+                type="checkbox"
+                className="w-4 ml-3"
+              />
+              <label className="text-gray-700" htmlFor="tc">
+                Accept Terms and Conditions
+              </label>
+            </div>
+            {errors.terms && (
+              <p className="col-span-2 ml-3 text-red-500 text-sm mb-[-20px]">
+                {errors.terms}
+              </p>
+            )}
           </div>
-          {errors.terms && <p className="col-span-2">{errors.terms}</p>}
         </div>
 
         <div className="flex justify-end mt-6">
