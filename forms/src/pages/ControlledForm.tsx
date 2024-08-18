@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setForm } from "../store/slices/controlledFormSlice.ts";
 import { convertBase64 } from "../helpers/base64.ts";
 import { RootState } from "../store/store.ts";
+import PasswordStrength from "../components/PasswordStrength.tsx";
 
 function ControlledForm() {
   const dispatch = useDispatch();
@@ -18,11 +19,14 @@ function ControlledForm() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<Yup.InferType<typeof schema>>({
     resolver: yupResolver(schema),
     mode: "all",
   });
+
+  const password = watch("password");
 
   const onSubmit = async (rawData: Yup.InferType<typeof schema>) => {
     const image = await convertBase64(rawData.image[0]);
@@ -114,6 +118,7 @@ function ControlledForm() {
               type="password"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
             />
+            <PasswordStrength password={password} />
             {errors.password && (
               <p className="text-red-500 text-sm mb-[-20px]">
                 {errors.password.message}
