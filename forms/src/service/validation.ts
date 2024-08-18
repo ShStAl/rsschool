@@ -24,16 +24,16 @@ const schema = Yup.object().shape({
     .test(
       "fileType",
       "Unsupported File Format. Allowed formats: png, jpeg",
-      (file) => {
-        if (!file) return true;
+      (files) => {
+        if (!files) return true;
         const allowedFormats = ["image/jpeg", "image/png"];
-        return file && allowedFormats.includes(file[0]?.type);
+        return files && allowedFormats.includes(files[0]?.type);
       },
     )
-    .test("fileSize", "File too large. Max size is 2MB", (file) => {
-      if (!file) return true;
+    .test("fileSize", "File too large. Max size is 2MB", (files) => {
+      if (!files) return true;
       const maxSize = 2 * 1024 * 1024; // 2MB
-      return file && file[0]?.size <= maxSize;
+      return files && files[0]?.size <= maxSize;
     }),
   country: Yup.string().required("Country is required"),
 });

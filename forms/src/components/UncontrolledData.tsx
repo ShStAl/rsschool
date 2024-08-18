@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store.ts";
 
-function ControlledData() {
-  const data = useSelector((state: RootState) => state.controlledForm);
+function UncontrolledData() {
+  const data = useSelector((state: RootState) => state.uncontrolledForm);
   return (
     <div className="w-96 h-96 px-6 py-3 bg-white rounded-md shadow-md">
       <div className="flex flex-col gap-3 mt-4">
@@ -42,4 +42,4 @@ function ControlledData() {
   );
 }
 
-export default ControlledData;
+export default UncontrolledData;

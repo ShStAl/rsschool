@@ -12,8 +12,8 @@ const initialState: IFormData = {
   country: "",
 };
 
-export const controlledFormSlice = createSlice({
-  name: "controlledForm",
+export const uncontrolledFormSlice = createSlice({
+  name: "uncontrolledForm",
   initialState,
   reducers: {
     setForm: (state, action: PayloadAction<IFormData>) => {
@@ -28,5 +28,5 @@ export const controlledFormSlice = createSlice({
   },
 });
 
-export const { setForm } = controlledFormSlice.actions;
-export default controlledFormSlice.reducer;
+export const { setForm } = uncontrolledFormSlice.actions;
+export default uncontrolledFormSlice.reducer;

@@ -1,9 +1,9 @@
 export interface IFormData {
-  name: string;
-  age: number;
-  email: string;
-  password: string;
-  gender: string;
-  image: string;
-  country: string;
+  name: string | undefined;
+  age: number | null;
+  email: string | undefined;
+  password: string | undefined;
+  gender: string | undefined;
+  image: string | undefined;
+  country: string | undefined;
 }
